@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * CubeCart v6
+ * ========================================
+ * CubeCart is a registered trade mark of CubeCart Limited
+ * Copyright CubeCart Limited 2017. All rights reserved.
+ * UK Private Limited Company No. 5323904
+ * ========================================
+ * Web:   http://www.cubecart.com
+ * Email:  sales@cubecart.com
+ * License:  GPL-3.0 http://opensource.org/licenses/GPL-3.0
+-->
+<emails version="2.0" language="en-GB">
+  <email name="admin.password_recovery">
+    <subject><![CDATA[Admin Password Recovery]]></subject>
+    <content type="html"><![CDATA[<p>Dear {$DATA.name},</p> 
+        <p>Az üzletek adminisztrációs vezérlőpultjához való hozzáférés visszaszerzéséhez. Kérjük, kövesse az alábbi linket:</p> 
+        <p><a href="{$DATA.link}">{$DATA.link}</a></p> 
+        <p>Ha a fenti link nem működik, kérjük, másolja ki és illessze be böngészője címsorába.</p>]]></content>
+    <content type="text"><![CDATA[Dear {$DATA.name},
+        
+        Az üzletek adminisztrációs vezérlőpultjához való hozzáférés visszaszerzéséhez. Kérjük, kövesse az alábbi linket:
+        
+        {$DATA.link}
+        
+        Ha a fenti link nem működik, kérjük, másolja ki és illessze be böngészője címsorába.]]></content>
+  </email>
+  <email name="cart.order_complete">
+    <subject><![CDATA[Rendelés Teljesítve]]></subject>
+    <content type="html"><![CDATA[<p>Hi {$DATA.first_name},</p> 
+        <p>Örömmel közöljük,hogy a rendelési számon {$DATA.cart_order_id} leadta rendelését. Ha fizikai termékeket rendelt, azoknak hamarosan meg kell érkezniük.</p>]]></content>
+    <content type="text"><![CDATA[Hi {$DATA.first_name},
+        
+        Örömmel közöljük,hogy a rendelési számon {$DATA.cart_order_id} leadta rendelését. Ha fizikai termékeket rendelt, azoknak hamarosan meg kell érkezniük.]]></content>
+  </email>
+  <email name="cart.order_cancelled">
+    <subject><![CDATA[Rendelés Megszakítva]]></subject>
+    <content type="html"><![CDATA[<p>Hello {$DATA.first_name},</p> 
+        <p>A {$DATA.cart_order_id} számú rendelés elutasítva.</p>]]></content>
+    <content type="text"><![CDATA[Hello {$DATA.first_name},
+        
+        A {$DATA.cart_order_id} számú rendelés elutasítva.]]></content>
+  </email>
+  <email name="cart.order_confirmation">
+    <subject><![CDATA[Rendelés  Véglegesítése #{$DATA.cart_order_id}]]></subject>
+    <content type="html"><![CDATA[<p>Köszönjük {$DATA.first_name}!</p>
+        <p>A {$DATA.cart_order_id}  számú rendelés felvéve az adott időpontban : {$DATA.order_date}. Kérjük, őrizze meg ezt az e-mailt. Megrendelésének állapotát online megtekintheti.</p> 
+        <p><a href="{$DATA.link}">{$DATA.link}</a></p>
+        <table width="100%">
+        <tr>
+        <td valign="top" width="50%"><strong>SZámlázási cím:</strong><br>
+        {$BILLING.first_name} {$BILLING.last_name}<br>
+        {if !empty($BILLING.company_name)}{$BILLING.company_name}<br>
+        {/if}
+        {$BILLING.line1}<br>
+        {if !empty($BILLING.line2)}{$BILLING.line2}<br>
+        {/if}
+        {$BILLING.town}<br>
+        {$BILLING.state}<br>
+        {$BILLING.postcode}<br>
+        {$BILLING.country}<br>
+        {$BILLING.phone}<br>
+        <br>
+        <strong>Email:</strong><br>
+        {$BILLING.email}</td>
+        <td valign="top" width="50%"><strong>Szállítási cím:</strong><br>
+        {$SHIPPING.first_name} {$SHIPPING.last_name}<br>
+        {if !empty($SHIPPING.company_name)}{$SHIPPING.company_name} <br>
+        {/if}{$SHIPPING.line1}<br>
+        {if !empty($SHIPPING.line2)}{$SHIPPING.line2} <br>
+        {/if}{$SHIPPING.town}<br>
+        {$SHIPPING.state}<br>
+        {$SHIPPING.postcode}<br>
+        {$SHIPPING.country}</td>
+        </tr>
+        </table>
+        <table border="0" cellpadding="3" cellspacing="0" width="100%">
+        <tbody>
+        <tr>
+        <td><strong>Item</strong></td>
+        <td><strong>Quantity</strong></td>
+        <td><strong>Cost</strong></td>
+        </tr>
+        {foreach from=$PRODUCTS item=product}
+        <tr>
+        <td>{$product.name} <br>{$product.product_options}</td>
+        <td>{$product.quantity}</td>
+        <td>{$product.price}</td>
+        </tr>
+        {/foreach}
+        <tr>
+        <td>&nbsp;</td>
+        <td> {if !empty($DATA.ship_method)}{$DATA.ship_method|replace:'_':' '}:{if !empty($DATA.ship_product)} ({$DATA.ship_product}){/if}{else}Shipping:{/if}</td>
+        <td> {$DATA.shipping}</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        <td> Kedvezmény:</td>
+        <td> {$DATA.discount}</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        <td> Részösszeg:</td>
+        <td> {$DATA.subtotal}</td>
+        </tr>
+        {foreach from=$TAXES item=tax}
+        <tr>
+        <td>&nbsp;</td>
+        <td> {$tax.tax_name}: ({$tax.tax_percent}%)</td>
+        <td> {$tax.tax_amount}</td>
+        </tr>
+        {/foreach}
+        <tr>
+        <td>&nbsp;</td>
+        <td><strong>Rendelés összesen: </strong></td>
+        <td><strong>{$DATA.total}</strong></td>
+        </tr>
+        </tbody>
+        </table>
+        {if !empty($DATA.note_to_customer)}
+        <p>&quot;{$DATA.note_to_customer}&quot;</p>
+        {/if}]]></content>
+    <content type="text"><![CDATA[Köszönjük {$DATA.first_name}!
+        
+        A {$DATA.cart_order_id} számú rendelés felvéve az adott időpontban:  {$DATA.order_date}. Kérjük, őrizze meg ezt az e-mailt. Megrendelésének állapotát online megtekintheti. 
+        
+        {$DATA.link}
+        
+        ----------------------------------------------------------------------
+        Számlázási  cím:
+        {$BILLING.first_name} {$BILLING.last_name}
+        {if !empty($BILLING.company_name)}{$BILLING.company_name}
+        {/if}{$BILLING.line1}
+        {if !empty($BILLING.line2)}{$BILLING.line2}
+        {/if}{$BILLING.town}
+        {$BILLING.state}
+        {$BILLING.postcode}
+        {$BILLING.country}
+        {$BILLING.phone}
+        
+        Email:
+        {$BILLING.email}
+        
+        Szállítási cím:
+        {$SHIPPING.first_name} {$SHIPPING.last_name}
+        {if !empty($SHIPPING.company_name)}{$SHIPPING.company_name}
+        {/if}{$SHIPPING.line1}
+        {if !empty($SHIPPING.line2)}{$SHIPPING.line2}
+        {/if}{$SHIPPING.town}
+        {$SHIPPING.state}
+        {$SHIPPING.postcode}
+        {$SHIPPING.country}
+        
+        ----------------------------------------------------------------------
+        Rendelésének részletei:
+        
+        {foreach from=$PRODUCTS item=product}
+        -----------------------------------
+        {$product.name}
+        {$product.product_options}
+        
+        Termékkód: {$product.product_code}
+        Egységár: {$product.price}
+        Mennyiség: {$product.quantity}
+        
+        {/foreach}
+        -----------------------------------
+        Részösszeg: {$DATA.subtotal}
+        KEdvezmény: {$DATA.discount}
+        {if !empty($DATA.ship_method)}{$DATA.ship_method|replace:'_':' '}:{if !empty($DATA.ship_product)} ({$DATA.ship_product}){/if}{else}Shipping:{/if} {$DATA.shipping}
+        {foreach from=$TAXES item=tax}{$tax.tax_name} ({$tax.tax_percent}%): {$tax.tax_amount}
+        {/foreach}
+        --------------------------
+        Rendelés összesen: {$DATA.total}
+        ==========================
+        {if !empty($DATA.note_to_customer)}
+        "{$DATA.note_to_customer}"{/if}]]></content>
+  </email>
+  <email name="cart.payment_fraud">
+    <subject><![CDATA[Megrendelési hiba]]></subject>
+    <content type="html"><![CDATA[<p>Hi {$DATA.first_name},</p> 
+        <p>Sajnáljuk , de nem tudtuk elfogadni fizetési szándékát a következő rendelési számon : {$DATA.cart_order_id}. Ha bármilyen kérdése van, forduljon bizalommal a személyzet egyik tagjához.</p>]]></content>
+    <content type="text"><![CDATA[Hi {$DATA.first_name},
+        
+        Sajnáljuk , de nem tudtuk elfogadni fizetési szándékát a következő rendelési számon : {$DATA.cart_order_id}. Ha bármilyen kérdése van, forduljon bizalommal a személyzet egyik tagjához.]]></content>
+  </email>
+  <email name="account.password_recovery">
+    <subject><![CDATA[Jelszó Visszaállítás]]></subject>
+    <content type="html"><![CDATA[<p>Kedves {$DATA.first_name} {$DATA.last_name},<br> 
+        <br> 
+        Jelszava visszaállításához kattintson az alábbi linkre, vagy másolja ki és illessze be a címet webböngészője címablakába. Miután felkerült a weboldalra, meg kell adnia és meg kell erősítenie új jelszavát.<br> 
+        <br> 
+        <a href="{$DATA.reset_link}">{$DATA.reset_link}</a><br> 
+        <br> 
+        Ha további segítségre van szüksége jelszava visszaállításához, forduljon hozzánk.</p>]]></content>
+    <content type="text"><![CDATA[Hi {$DATA.first_name},
+        
+        Jelszava visszaállításához kattintson az alábbi linkre, vagy másolja ki és illessze be a címet webböngészője címablakába. Miután felkerült a weboldalra, meg kell adnia és meg kell erősítenie új jelszavát.
+        
+        {$DATA.reset_link}
+        
+        Ha további segítségre van szüksége jelszava visszaállításához, forduljon hozzánk.]]></content>
+  </email>
+  <email name="admin.order_received">
+    <subject><![CDATA[Új rendelés #{$DATA.cart_order_id}]]></subject>
+    <content type="html"><![CDATA[<p>{$DATA.first_name} {$DATA.last_name} {if !empty($BILLING.company_name)}({$BILLING.company_name}){/if} just placed order number {$DATA.cart_order_id} on {$DATA.order_date}.</p>
+        <p>This order can be managed online by following the link below.</p> 
+        <p><a href="{$DATA.link}">{$DATA.link}</a></p>
+        <table width="100%">
+        <tr>
+        <td valign="top" width="50%"><strong>Billing address:</strong><br>
+        {$BILLING.first_name} {$BILLING.last_name}<br>
+        {if !empty($BILLING.company_name)}{$BILLING.company_name}<br>
+        {/if}
+        {$BILLING.line1}<br>
+        {if !empty($BILLING.line2)}{$BILLING.line2}<br>
+        {/if}
+        {$BILLING.town}<br>
+        {$BILLING.state}<br>
+        {$BILLING.postcode}<br>
+        {$BILLING.country}<br>
+        {$BILLING.phone}<br>
+        <br>
+        <strong>Email:</strong><br>
+        {$BILLING.email}</td>
+        <td valign="top" width="50%"><strong>Shipping address:</strong><br>
+        {$SHIPPING.first_name} {$SHIPPING.last_name}<br>
+        {if !empty($SHIPPING.company_name)}{$SHIPPING.company_name} <br>
+        {/if}{$SHIPPING.line1}<br>
+        {if !empty($SHIPPING.line2)}{$SHIPPING.line2} <br>
+        {/if}{$SHIPPING.town}<br>
+        {$SHIPPING.state}<br>
+        {$SHIPPING.postcode}<br>
+        {$SHIPPING.country}</td>
+        </tr>
+        </table>
+        <table border="0" cellpadding="3" cellspacing="0" width="100%">
+        <tbody>
+        <tr>
+        <td><strong>Item</strong></td>
+        <td><strong>Quantity</strong></td>
+        <td><strong>Cost</strong></td>
+        </tr>
+        {foreach from=$PRODUCTS item=product}
+        <tr>
+        <td>{$product.name} <br>{$product.product_options}</td>
+        <td>{$product.quantity}</td>
+        <td>{$product.price}</td>
+        </tr>
+        {/foreach}
+        <tr>
+        <td>&nbsp;</td>
+        <td> {if !empty($DATA.ship_method)}{$DATA.ship_method|replace:'_':' '}:{if !empty($DATA.ship_product)} ({$DATA.ship_product}){/if}{else}Shipping:{/if}</td>
+        <td> {$DATA.shipping}</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        <td> Discount:</td>
+        <td> {$DATA.discount}</td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        <td> Subtotal:</td>
+        <td> {$DATA.subtotal}</td>
+        </tr>
+        {foreach from=$TAXES item=tax}
+        <tr>
+        <td>&nbsp;</td>
+        <td> {$tax.tax_name}: ({$tax.tax_percent}%)</td>
+        <td> {$tax.tax_amount}</td>
+        </tr>
+        {/foreach}
+        <tr>
+        <td>&nbsp;</td>
+        <td><strong>Order Total: </strong></td>
+        <td><strong>{$DATA.total}</strong></td>
+        </tr>
+        </tbody>
+        
+        </table>]]></content>
+    <content type="text"><![CDATA[{$DATA.first_name} {$DATA.last_name} {if !empty($BILLING.company_name)}({$BILLING.company_name}){/if} just placed order number {$DATA.cart_order_id} on {$DATA.order_date}.
+        
+        Ez a rendelés online kezelhető az alábbi linken.
+        
+        {$DATA.link}
+        
+        ----------------------------------------------------------------------
+        Számlázási cím:
+        {$BILLING.first_name} {$BILLING.last_name}
+        {if !empty($BILLING.company_name)}{$BILLING.company_name}
+        {/if}{$BILLING.line1}
+        {if !empty($BILLING.line2)}{$BILLING.line2}
+        {/if}{$BILLING.town}
+        {$BILLING.state}
+        {$BILLING.postcode}
+        {$BILLING.country}
+        {$BILLING.phone}
+        
+        Email:
+        {$BILLING.email}
+        
+        Szállítási cím:
+        {$SHIPPING.first_name} {$SHIPPING.last_name}
+        {if !empty($SHIPPING.company_name)}{$SHIPPING.company_name}
+        {/if}{$SHIPPING.line1}
+        {if !empty($SHIPPING.line2)}{$SHIPPING.line2}
+        {/if}{$SHIPPING.town}
+        {$SHIPPING.state}
+        {$SHIPPING.postcode}
+        {$SHIPPING.country}
+        
+        ----------------------------------------------------------------------
+        Rendelés részletei
+        
+        {foreach from=$PRODUCTS item=product}
+        -----------------------------------
+        {$product.name}
+        {$product.product_options}
+        
+        Part Number: {$product.product_code}
+        Unit Price: {$product.price}
+        Qty: {$product.quantity}
+        
+        {/foreach}
+        -----------------------------------
+        Részösszeg: {$DATA.subtotal}
+        Kedvezmény: {$DATA.discount}
+        {if !empty($DATA.ship_method)}{$DATA.ship_method|replace:'_':' '}:{if !empty($DATA.ship_product)} ({$DATA.ship_product}){/if}{else}Shipping:{/if} {$DATA.shipping}
+        {foreach from=$TAXES item=tax}{$tax.tax_name} ({$tax.tax_percent}%): {$tax.tax_amount}
+        {/foreach}
+        --------------------------
+        Összesen: {$DATA.total}
+        ==========================]]></content>
+  </email>
+  <email name="admin.review_added">
+    <subject><![CDATA[New Product Review]]></subject>
+    <content type="html"><![CDATA[{$DATA.name} has submit a new review/comment about '{$DATA.product_name}'. This can be moderated following the link below.
+        <p><strong>Moderation Link:</strong><br><a href='{$DATA.link}'>{$DATA.link}</a></p> 
+        <p><strong>Review Text:</strong><br>{$DATA.review}</p>]]></content>
+    <content type="text"><![CDATA[{$DATA.name} has submit a new review/comment about '{$DATA.product_name}'. This can be moderated following the link below.
+        
+        Moderation Link: 
+        {$DATA.link}
+        Review Text:
+        {$DATA.review}]]></content>
+  </email>
+  <email name="cart.digital_download">
+    <subject><![CDATA[Your Purchased Downloads]]></subject>
+    <content type="html"><![CDATA[<p>Hi {$DATA.first_name},</p> 
+        <p>Your digital files are now ready for download. Please use the links provided below to access them below:</p> 
+        {foreach from=$DOWNLOADS item=download} 
+        <p><strong>{$download.name}:</strong> (Link expires on {$download.expire}<strong>)</strong><br> 
+        <a href="{$download.url}">{$download.url}</a></p>  
+        {/foreach}
+        <p>If the links above don't work, please try copy and pasting them it into your browser address bar. You can also find access to these files from your the customer area of our website.</p> 
+        <p>&nbsp;</p>]]></content>
+    <content type="text"><![CDATA[Hi {$DATA.first_name},
+        
+        Your digital files are now ready for download. Please use the links provided below to access them below:
+        
+        {foreach from=$DOWNLOADS item=download} 
+        {$download.name}: (Link expires on {$download.expire})
+        {$download.url}
+        {/foreach}
+        
+        If the links above don't work, please try copy and pasting them it into your browser address bar. You can also find access to these files from your the customer area of our website.]]></content>
+  </email>
+  <email name="cart.gift_certificate">
+    <subject><![CDATA[Your Gift Card]]></subject>
+    <content type="html"><![CDATA[<p>Dear {$DATA.name},</p> 
+        <p>We are pleased to be sending you this gift card which you can use towards the purchase of any items on our website.</p> 
+        <p><strong>From: </strong>{$DATA.first_name} {$DATA.last_name}<br> 
+        <strong>Amount: </strong>{$DATA.value}<br> 
+        <strong>Claim Code:</strong> {$DATA.code}<br> 
+        <strong>Gift Message:</strong> {$DATA.message}</p> 
+        <p>-------------------</p> 
+        <p>To redeem this gift card please enter the &quot;Claim Code&quot; above into the text field labeled &quot;Promotional code or gift card&quot; during checkout.</p> 
+        <p>Why not spend it now?</p>]]></content>
+    <content type="text"><![CDATA[Dear {$DATA.name},
+        
+        We are pleased to  be sending you this gift card which you can use towards the purchase of any item(s) on our website.
+        
+        Happy shopping!
+        
+        From: {$DATA.first_name} {$DATA.last_name}
+        Amount: {$DATA.value}
+        Claim Code: {$DATA.code}
+        Gift Message: {$DATA.message}
+        
+        -------------------
+        
+        To redeem this gift card please enter the "Claim Code" above into the text field labeled "Promotional code or gift card" during checkout.
+        
+        Why not spend it now?]]></content>
+  </email>
+  <email name="catalogue.tell_friend">
+    <subject><![CDATA[{$DATA.from} has recommended something]]></subject>
+    <content type="html"><![CDATA[Dear {$DATA.to},
+        <p>Your friend <strong>{$DATA.from}</strong> thought that you might be interested in <strong>{$DATA.name}</strong>.</p> 
+        <p><strong>Product Link:</strong> <a href="{$DATA.link}">{$DATA.name}</a></p> 
+        <p>{$DATA.message}</p>]]></content>
+    <content type="text"><![CDATA[Dear {$DATA.to},
+        
+        Your friend {$DATA.from} thought that you might be interested in '{$DATA.name}'.
+        
+        {$DATA.name}
+        Product Link: {$DATA.link}
+        
+        {$DATA.message}]]></content>
+  </email>
+  <email name="cart.payment_received">
+    <subject><![CDATA[Thank you for your payment!]]></subject>
+    <content type="html"><![CDATA[<p>Hi {$DATA.first_name},</p> 
+        <p>Thank you. We have received a payment of {$DATA.total} for order number {$DATA.cart_order_id}.</p>]]></content>
+    <content type="text"><![CDATA[Hi {$DATA.first_name},
+        
+        Thank you. We have received a payment of {$DATA.total} for order number {$DATA.cart_order_id}.]]></content>
+  </email>
+</emails>
